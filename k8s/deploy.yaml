@@ -31,8 +31,7 @@ spec:
     spec:
       containers:
         - name: weather-dashboard
-          # TODO: replace with your registry/image:tag
-          image: weather-dashboard:latest
+          image: simoneconti/weather-dashboard:1.0.0
           ports:
             - name: http
               containerPort: 80
