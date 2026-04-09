@@ -1,6 +1,18 @@
 ###############################################
 # Weather Dashboard - Kubernetes Deployment
 # Usage: kubectl apply -f k8s/deploy.yaml
+#
+# Before deploying, replace:
+#   - <your-registry/weather-dashboard:tag> with your container image
+#   - <your-domain.com> with your domain
+#   - <your-cluster-issuer> with your cert-manager ClusterIssuer name
+#
+# Prerequisites:
+#   - nginx Ingress Controller
+#   - cert-manager with a ClusterIssuer configured
+#     (use ingressClassName in your ClusterIssuer solver,
+#      not the deprecated "class" field, to avoid webhook
+#      pathType validation errors)
 ###############################################
 ---
 apiVersion: v1
@@ -31,7 +43,7 @@ spec:
     spec:
       containers:
         - name: weather-dashboard
-          image: simoneconti/weather-dashboard:latest
+          image: <your-registry/weather-dashboard:tag>
           ports:
             - name: http
               containerPort: 80
@@ -84,12 +96,12 @@ metadata:
   labels:
     app.kubernetes.io/name: weather-dashboard
   annotations:
-    cert-manager.io/cluster-issuer: letsencrypt-prod
+    cert-manager.io/cluster-issuer: <your-cluster-issuer>
     nginx.ingress.kubernetes.io/ssl-redirect: "true"
 spec:
   ingressClassName: nginx
   rules:
-    - host: weatherdemo.simoneconti.com
+    - host: <your-domain.com>
       http:
         paths:
           - path: /
@@ -101,7 +113,7 @@ spec:
                   name: http
   tls:
     - hosts:
-        - weatherdemo.simoneconti.com
+        - <your-domain.com>
       secretName: weather-dashboard-tls
 ---
 apiVersion: autoscaling/v2

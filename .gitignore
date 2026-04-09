@@ -44,3 +44,4 @@ app.*.map.json
 /android/app/profile
 /android/app/release
 .claude/
+k8s/deploy-local.yaml
